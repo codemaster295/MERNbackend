@@ -39,7 +39,6 @@ app.use('/api/v1/signup', Signup)
 app.use('/api/v1/login',Login)
 app.use('/api/v1/post' , PostRouter)
 app.use('/api/v1/users' ,userRouter )
-app.use('/', postRoute)
 app.get('/:email', async (req, res) => {
   try {
     const signup = await Signupdetails.find({ email: req.params.email });
