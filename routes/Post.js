@@ -60,53 +60,22 @@ router.post("/createpost/:email", async (req, res) => {
 
   })
 })
-router.put("/likepost", async (req, res) => {
+router.post("/likepost", async (req, res) => {
   const userLiked = await UserData.findOne({ email: req.body.email })
   const post = await Post.findOne({ _id: req.body.postid })
-  // console.log(req.body, post.like.includes(userLiked._id), "post is liked")
-  if (post.like.includes(userLiked._id)) {
-    // console.log(post.like.includes("fnbfjsbjhrbfjsbfhb"))
-    // const data = post.like.filter((a,index)=>{
-      //  return JSON.stringify(a).includes(userLiked._id)
-      
-      // })
-      // console.log(data)
-      const post = await Post.findOneAndUpdate({ _id: req.body.postid },{
-        $unset:{
-          like:{
-            _id:userLiked._id
-          }
-        }
-      })
-      post.save()
-      // console.log(post)
-      // post.filter((x , index)=>{x.like.includes(userLiked._id);console.log(index)})
-      // const mmo = post.like.pop(post.like.filter(x=>x=userLiked._id))
-      // const mmo = Post.findOne({ _id: req.body.postid }).populate("like").exec((x,y)=>{
-    //   console.log(x,y,"this is z")
-    // })
-    // console.log( mmo, "Dmddndn")
-    // const mmo = post.like.filter((a,index) =>{a===userLiked._id ; console.log(a,userLiked._id ,index)})
-    // var value = JSON.stringify(userLiked._id)
-
-    // var arr = post.like
-
-    // arr = arr.filter(function (item) {
-    
-    //   return item !== value
-    // })
-
-    // console.log(arr,value)
-    // console.log("userIs liked", mmo, userLiked._id)
-    console.log("reached")
-
-    res.send(false)
-
+  if (post.like && post.like.includes(userLiked._id)) {
+    const mmo = Post.findOneAndUpdate({ _id: req.body.postid }, {
+      $pull: {
+        like: userLiked._id
+      }
+    }).then((data) => {
+      data.save()
+    })
+    res.status(200).send(false)
   }
   else {
     post.like.push({ _id: userLiked._id })
     post.save()
-    // console.log(post)
     res.send(true)
   }
 })

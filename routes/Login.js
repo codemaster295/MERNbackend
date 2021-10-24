@@ -12,16 +12,11 @@ require('dotenv/config')
 router.post("/", async (req, res) => {
     try {
       const { email, password } = req.body;
-      console.log(req.body);
-  
       const UserData = await loginData.findOne({ email:email });
-      console.log(UserData);
       if (UserData && (await bcrypt.compare(password, UserData.password))) {
         // Create token
-        const token = jwt.sign({ user_id: UserData._id, email }, process.env.JWT_KEY);
-  
+        const token = jwt.sign({ user_id: UserData._id, email }, process.env.JWT_KEY);  
         UserData.token = token;
-  
         res.status(200).json({token:token});
       }
       res.status(401).send("Invalid Credentials");
