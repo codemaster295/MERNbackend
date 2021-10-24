@@ -8,8 +8,12 @@ const PostSchema = mongoose.Schema({
     like: [
         { type: mongoose.Schema.Types.ObjectId, ref: 'UserSchema' }
      ],
+     comment:[
+         {type: mongoose.Schema.Types.ObjectId , ref: 'UserSchema'}
+     ],
     message: String,
-    date:Date
+    date:Date,
+    ownerID:String
 })
 
 module.exports = mongoose.model('Posts', PostSchema)
