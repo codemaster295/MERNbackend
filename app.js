@@ -92,7 +92,7 @@ app.get("/posts/:email", async (req, res) => {
   // console.log(User[0].posts)
 
   // console.log(User.posts)
-  const postData = await Post.find().where('_id').in(User.posts).exec((err, records) => {
+  const postData = await Post.find({},{ownerID:0}).where('_id').in(User.posts).exec((err, records) => {
     res.json(records)
     // console.log(records)
   });

@@ -33,7 +33,7 @@ router.get("/posts/:email", async (req, res) => {
     console.log(dataArr)
 
     res.json(dataArr)
-    console.log(dataArr,"dawgdadagd")
+    console.log(dataArr, "dawgdadagd")
   }
 })
 router.post("/createpost/:email", async (req, res) => {
@@ -86,23 +86,25 @@ router.post("/comment", async (req, res) => {
   const userCommented = await UserData.findOne({ email: req.body.email })
   const post = await Post.findOne({ _id: req.body.postid })
   const CommentPost = await new Comment({
-    ownerID: userCommented._id,
     comment: req.body.comment,
+    ownerID:userCommented._id,
+    ownername:userCommented.username,
+    date: Date.now()
   })
-  // Comment.findById(req.body.commentid).then((data)=>{
-  //   UserData.findById(data.ownerID).then((data2)=>{
-  //     res.send(data2 )
-  //   })
-  // })
-
   CommentPost.save()
   post.comment.push(CommentPost)
   await post.save()
+  res.status(200).send(200)
 })
 router.get("/comments/users/:id", async (req, res) => {
   const post = await Post.findOne({ _id: req.params.id })
-  if(post){
-    const postData = await Comment.find().where('_id').in(post.comment).exec((err, records) => {
+  let  dataMain = []
+  if (post) {
+    const postData = await Comment.find().where('_id').in(post.comment).populate("ownerID"  , 'username profileimage  _id').exec(async (err, records) => {
+      dataMain = {
+        commentData:records
+      }    
+      console.log(records)
       res.status(200).send(records)
     });
   }

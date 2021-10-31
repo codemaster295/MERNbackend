@@ -7,8 +7,11 @@ const Comment = mongoose.Schema({
     like: [
         { type: mongoose.Schema.Types.ObjectId, ref: 'UserSchema' }
     ],
-    ownerID:String,
+    ownerID: 
+        { type: mongoose.Schema.Types.ObjectId, ref: 'UserSchema' }
+    ,
     ownername:String,
+    date:Date,
 
 });
 module.exports = mongoose.model('Comment', Comment)

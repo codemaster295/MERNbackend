@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
         _id:signup._id,
         email: req.body.email,
         username: `${req.body.firstname} ${req.body.lastname}`,
-        prifileimage: "",
+        profileimage: "",
         bio: "",
         birthdate:req.body.birthdate,
         gender:  req.body.gender,
